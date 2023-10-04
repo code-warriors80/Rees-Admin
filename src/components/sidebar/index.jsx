@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom";
 
 const Navlinks = [
   { title: "Dashboard", icon: "bi bi-grid-1x2-fill", link: "/dashboard" },
+  { title: "Users", icon: "bi bi-person-fill", link: "/users" },
   { title: "Products", icon: "bi bi-bag-fill", link: "/products" },
   { title: "Orders", icon: "bi bi-clipboard2-fill", link: "/orders" },
   { title: "Settings", icon: "bi bi-gear-fill", link: "/settings" },
