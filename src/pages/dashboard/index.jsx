@@ -31,6 +31,11 @@ const Dashboard = () => {
 
       <section>
         <h1 className="mt-10">Recent Orders</h1>
+        <select className="border mt-2 text-xs outline-none">
+          <option>select</option>
+          <option>Cooking</option>
+          <option>Delivered</option>
+        </select>
         <div className="mt-5 relative overflow-x-auto w-[90%]">
           <table className="w-full text-sm text-left">
             <thead className="bg-[#F39300] text-white">

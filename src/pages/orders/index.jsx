@@ -80,7 +80,13 @@ const Orders = () => {
     <section className="p-6">
       <h1 className="text-3xl font-bold">Orders</h1>
 
-      <section className="grid my-8 w-2/3 divide-y divide-gray-200">
+      <select className="border mt-3 text-xs outline-none">
+          <option>select</option>
+          <option>Cooking</option>
+          <option>Delivered</option>
+      </select>
+
+      <section className="grid my-3 w-2/3 divide-y divide-gray-200">
         {ordersArray.map((order) => (
           <ListItem key={order.id} order={order} />
         ))}
