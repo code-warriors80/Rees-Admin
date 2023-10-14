@@ -9,6 +9,8 @@ import OrderId from "./pages/orders/order-id";
 import Orders from "./pages/orders";
 import Products from "./pages/products";
 import Settings from "./pages/settings";
+import EditProductPage from "./pages/products/components/EditProduct";
+import AddProduct from "./pages/products/components/AddProduct";
 
 function App() {
   return (
@@ -23,7 +25,10 @@ function App() {
           <Route path="/orders" element={<Orders />} />
           <Route path="/orders/:id" element={<OrderId />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/products/:productid/edit" element={<EditProductPage />} />
+          <Route path="products/add" element={<AddProduct />} />
         </Route>
+    
       </Routes>
     </BrowserRouter>
   );
