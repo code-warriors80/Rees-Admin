@@ -1,4 +1,5 @@
 import { Search, PlusCircle } from "react-bootstrap-icons";
+import { Link } from "react-router-dom";
 
 const Topbar = () => {
   return (
@@ -20,7 +21,9 @@ const Topbar = () => {
 
       <div className="product-right bg-purple-500 flex items-center px-4 py-2 rounded gap-2 text-white">
         <PlusCircle />
-        <h1>Add Product</h1>
+        <Link to={`/products/add`}>
+        <button>Add Product</button>
+        </Link>
       </div>
     </div>
   );

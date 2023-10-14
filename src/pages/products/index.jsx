@@ -47,7 +47,7 @@ const Products = () => {
           </div>
 
           <div className="flex gap-4 flex-wrap mt-6">
-              {foods.map((food) => (<Card title={food.name} alt={food.alt} desc={food.description} image={food.image}/>))}
+              {foods.map((food) => (<Card key={food.id} product={food}/>))}
           </div>
         </div>
         <div className="right">
