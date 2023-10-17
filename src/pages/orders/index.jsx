@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useOrder } from "../../context/ordersContext";
+import { useUser } from "../../context/userContext";
 
 const ordersArray = [
   {
@@ -55,6 +56,8 @@ const ordersArray = [
 ];
 
 const ListItem = ({ order }) => {
+  const { users } = useUser()
+  const orderUser = users ? users.filter(user => user.id === order.userId) : 'loading user...'
   return (
     <Link
       to={`/orders/${order.id}`}
@@ -62,7 +65,7 @@ const ListItem = ({ order }) => {
     >
       <div className="flex-1 min-w-0">
         <p className="text-sm font-medium text-gray-900 truncate ">
-          {order.user}
+          {orderUser}
         </p>
         <p className="text-sm text-gray-500 truncate ">{order.order}</p>
       </div>

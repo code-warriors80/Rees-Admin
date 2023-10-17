@@ -70,13 +70,6 @@ const Dashboard = () => {
             </thead>
             <tbody>
               {isLoading ? 'loading.....' : error ? error : content}
-              <tr className="text-gray-500">
-                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">Young Savage</th>
-                <td className="px-6 py-4 text-center">#12345567</td>
-                <td className="px-6 py-4 text-center">7</td>
-                <td className="px-6 py-4 text-center">N 8,700</td>
-                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap text-green-500">Delivered</th>
-              </tr>
             </tbody>
           </table>
         </div>

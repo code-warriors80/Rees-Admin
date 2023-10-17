@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useUser } from "../../../context/userContext";
 
 const ordersArray = [
   {
@@ -74,7 +75,7 @@ const TableItem = ({ order, qty }) => {
     </tr>
   );
 };
-
+const apiLink = process.env.REACT_APP_API_URL
 const ListItem = ({ text, value }) => {
   return (
     <span className="grid grid-cols-2 mb-1.5 items-center gap-x-20">
@@ -91,23 +92,31 @@ const ListItem = ({ text, value }) => {
 
 const OrderId = () => {
   let { id } = useParams();
-  const [order, setOrder] = useState(null)
-  const [error, setError] = useState(null)
-  const [isloading, setIsLoading] = useState(null)
+  const [order, setOrder] = useState([])
+  const { users } = useUser()
+  const orderUser = users ? users.filter(user => user.id === order.userId) : 'loading user...'
+  const [error, setError] = useState('')
+  const [isloading, setIsLoading] = useState(false)
   const getOrder = async () => {
 
-    const res = await fetch(`http://localhost:3000/api/orders/${id}`, {
-      headers: {
-        "Content-type": "application/json",
-      }
-    })
-    const data = res.json()
-    if (res.ok) {
-      setOrder(data.data)
-      setIsLoading(false)
+    try {
+      const res = await fetch(`${apiLink}/${id}`, {
+        headers: {
+          "Content-type": "application/json",
+        }
+      })
+      const data = res.json()
+      if (res.ok) {
+        setOrder(data.data)
+        setIsLoading(false)
 
-    }
-    if (!res.ok) {
+      }
+      if (!res.ok) {
+        setError("No product data at the moment")
+        setIsLoading(false)
+
+      }
+    } catch (error) {
       setError("No product data at the moment")
       setIsLoading(false)
 
@@ -124,19 +133,19 @@ const OrderId = () => {
         <div className="flex items-center space-x-4">
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-gray-900 truncate ">
-              Tim Burton
+              {orderUser?.name}
             </p>
             <p className="text-sm text-gray-500 truncate ">
-              timburton@gmail.net
+              {orderUser?.email}
             </p>
           </div>
           <div className="inline-flex items-center text-base font-semibold text-gray-900 ">
-            Order #{id}
+            Order ${order.id}
           </div>
         </div>
         <div className="mt-6">
           <h3 className="text-zinc-400 font-bold">
-            Order Details ({ordersArray.slice(5).length})
+            Order Details ({order.slice(5).length})
           </h3>
 
           <div className="mt-8 relative overflow-x-auto">
