@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 const ordersArray = [
@@ -90,7 +91,31 @@ const ListItem = ({ text, value }) => {
 
 const OrderId = () => {
   let { id } = useParams();
+  const [order, setOrder] = useState(null)
+  const [error, setError] = useState(null)
+  const [isloading, setIsLoading] = useState(null)
+  const getOrder = async () => {
 
+    const res = await fetch(`http://localhost:3000/api/orders/${id}`, {
+      headers: {
+        "Content-type": "application/json",
+      }
+    })
+    const data = res.json()
+    if (res.ok) {
+      setOrder(data.data)
+      setIsLoading(false)
+
+    }
+    if (!res.ok) {
+      setError("No product data at the moment")
+      setIsLoading(false)
+
+    }
+  }
+  useEffect(() => {
+    getOrder()
+  }, [id])
   return (
     <section className="p-6">
       <h1 className="text-3xl font-bold">Orders / Order-details</h1>

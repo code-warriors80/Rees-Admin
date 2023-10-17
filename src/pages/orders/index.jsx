@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useOrder } from "../../context/ordersContext";
 
 const ordersArray = [
   {
@@ -66,7 +67,7 @@ const ListItem = ({ order }) => {
         <p className="text-sm text-gray-500 truncate ">{order.order}</p>
       </div>
       <div className="inline-flex items-center text-base font-semibold text-gray-900 ">
-        {order.id.toLocaleString("en-NG", {
+        {order.date?.toLocaleString("en-NG", {
           style: "currency",
           currency: "NGN",
         })}
@@ -76,20 +77,28 @@ const ListItem = ({ order }) => {
 };
 
 const Orders = () => {
+  const { orders, error, isLoading } = useOrder()
+
+  const content = orders?.map((order) => (
+    <ListItem key={order.id} order={order} />
+  ))
+
+
   return (
     <section className="p-6">
       <h1 className="text-3xl font-bold">Orders</h1>
 
       <select className="border mt-3 text-xs outline-none">
-          <option>select</option>
-          <option>Cooking</option>
-          <option>Delivered</option>
+        <option>select</option>
+        <option>Cooking</option>
+        <option>Delivered</option>
       </select>
 
       <section className="grid my-3 w-2/3 divide-y divide-gray-200">
-        {ordersArray.map((order) => (
-          <ListItem key={order.id} order={order} />
-        ))}
+        {
+          isLoading ? 'loading...' :
+            error ? "An error occured" : content
+        }
       </section>
     </section>
   );

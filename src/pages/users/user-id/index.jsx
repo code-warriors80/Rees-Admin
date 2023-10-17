@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 const ListItem = ({ title, text }) => {
@@ -11,6 +12,30 @@ const ListItem = ({ title, text }) => {
 
 const UserId = () => {
   let { id } = useParams();
+  const [user, setUser] = useState(null)
+  const [isLoading, setIsLoading] = useState(null)
+  const [error, setError] = useState(null)
+  const getUser = async () => {
+    const res = await fetch(`http://localhost:3000/api/users/${id}`, {
+      headers: {
+        "Content-type": "application/json",
+      }
+    })
+    const data = res.json()
+    if (res.ok) {
+      setUser(data.data)
+      setIsLoading(false)
+
+    }
+    if (!res.ok) {
+      setError("No product data at the moment")
+      setIsLoading(false)
+
+    }
+  }
+  useEffect(() => {
+    getUser()
+  }, [id])
 
   return (
     <section className="p-6">
@@ -24,7 +49,7 @@ const UserId = () => {
             alt=""
           />
           <span className="text-center">
-            <p className="font-semibold text-lg mb-1">John Doe</p>
+            <p className="font-semibold text-lg mb-1">{user.username}</p>
             <p>test1234@gmail.com</p>
           </span>
 

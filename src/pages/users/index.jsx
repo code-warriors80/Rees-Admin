@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from "react-router-dom";
+import { useUser } from '../../context/userContext';
 
 const usersArray = [
   {
@@ -54,18 +55,26 @@ const ListUsers = ({ user }) => {
   );
 };
 
-const index = () => {
+const Users = () => {
+  const { users, isLoading, error } = useUser()
+  const content = users.map((user) => (
+    <ListUsers key={user.id} user={user} />
+  ))
   return (
     <section className="p-6">
       <h1 className="text-3xl font-bold">Users</h1>
 
       <section className="grid my-8 w-2/3 divide-y divide-gray-200">
-        {usersArray.map((user) => (
+        {/* {usersArray.map((user) => (
           <ListUsers key={user.id} user={user} />
-        ))}
+        ))} */}
+        {
+          isLoading ? 'loading...' :
+            error ? error : content
+        }
       </section>
     </section>
   )
 }
 
-export default index
+export default Users
