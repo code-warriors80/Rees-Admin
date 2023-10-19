@@ -90,6 +90,18 @@ const AddProduct = () => {
           </div>
         </div>
 
+        <div className="flex flex-col gap-2">
+          <p className="font-medium text-lg">Product Image:</p>
+          <div>
+            <select className="border outline-none">
+              <option value="">Select Category</option>
+              <option value="">Local | Continental</option>
+              <option value="">English | Foreign</option>
+              <option value="">Soup | Stew</option>
+            </select>
+          </div>
+        </div>
+
         <div className="flex flex-col gap-1">
           <p className="font-medium text-lg">Price:</p>
           <div>
