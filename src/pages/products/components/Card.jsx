@@ -1,9 +1,37 @@
 import React, { useState } from "react";
 import { ThreeDotsVertical } from "react-bootstrap-icons";
 import { Link } from "react-router-dom";
+import { useProduct } from "../../../context/productContext";
+
+const apiLink = process.env.REACT_APP_API_URL;
 
 const Card = ({ product }) => {
-    const [dropdown, setDropdown] = useState(false)
+  const [dropdown, setDropdown] = useState(false)
+  const [error, setError] = useState('')
+  const { loadProduct } = useProduct()
+  
+
+  const handleDelete = async (e) => {
+    e.preventDefault()
+    alert('Are you sure?')
+     try {
+       const res = await fetch(`${apiLink}/product/delete_products/${product.id}`, {
+        method:'DELETE',
+        headers: {
+          "Content-type": "application/json",
+        },
+      });
+      const data = await res.json();
+      if (res.ok) {
+        loadProduct()
+      }
+      if (!res.ok) {
+        setError("No order data at the moment");
+      }
+    } catch (error) {
+      setError("No order data at the moment");
+    }
+  }
 
   return (
     <div className="relative maincard card card-compact w-80 bg-base-100 shadow-xl">
@@ -17,7 +45,7 @@ const Card = ({ product }) => {
             <ul className="items-end text-left rounded-xl w-40 bg-white flex flex-col">
                <li className="p-1 w-full text-right rounded-t-xl l-item"><Link to={`/products/${product.id}/edit`}>Edit</Link></li> 
                <li className="p-1 w-full text-right l-item"> <a href="blank">View Details</a></li> 
-               <li className="p-1 w-full text-right rounded-b-xl l-item"> <a href="blank">Delete</a></li> 
+               <li className="p-1 w-full text-right rounded-b-xl l-item"> <a onClick={handleDelete}>Delete</a></li> 
             </ul>
           </div>
         </div>

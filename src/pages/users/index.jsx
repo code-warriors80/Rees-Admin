@@ -40,14 +40,14 @@ const usersArray = [
 const ListUsers = ({ user }) => {
   return (
     <Link
-      to={`/users/${user.id}`}
+      to={`/users/${user._id}`}
       className="flex items-center p-3 hover:bg-zinc-50 space-x-4"
     >
       <div className="flex-1 min-w-0">
         <p className="text-sm font-medium text-gray-900 truncate ">
-          {user.name}
+          {user.username}
         </p>
-        <p className="text-sm text-gray-500 truncate ">{user.email}</p>
+      <p className="text-sm text-gray-500 truncate hover:underline">{user.email}</p>
       </div>
       <div className="inline-flex items-center text-base font-semibold text-gray-900 ">
       </div>
@@ -57,9 +57,9 @@ const ListUsers = ({ user }) => {
 
 const Users = () => {
   const { users, isLoading, error } = useUser()
-  const content = users.map((user) => (
+  const content =users.length > 0 ?  users.map((user) => (
     <ListUsers key={user.id} user={user} />
-  ))
+  )) : <h1>'No user yet'</h1>
   return (
     <section className="p-6">
       <h1 className="text-3xl font-bold">Users</h1>

@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { getCustomerOrder } from "../../../apIservice/apis";
+import { useOrder } from "../../../context/ordersContext";
 
 const ListItem = ({ title, text }) => {
   return (
@@ -10,20 +12,27 @@ const ListItem = ({ title, text }) => {
   );
 };
 
+
+const apiLink = process.env.REACT_APP_API_URL
 const UserId = () => {
   let { id } = useParams();
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState([])
+  const [userOrder, setUserOrder] = useState([])
+  const { orders } = useOrder()
   const [isLoading, setIsLoading] = useState(null)
   const [error, setError] = useState(null)
   const getUser = async () => {
-    const res = await fetch(`http://localhost:3000/api/users/${id}`, {
+    try {
+      const res = await fetch(`${apiLink}/users/user/${id}`, {
       headers: {
         "Content-type": "application/json",
       }
     })
-    const data = res.json()
+    const data = await res.json()
     if (res.ok) {
-      setUser(data.data)
+      setUser(data)
+      const order = await getCustomerOrder(id)
+      setUserOrder(order)
       setIsLoading(false)
 
     }
@@ -32,11 +41,20 @@ const UserId = () => {
       setIsLoading(false)
 
     }
+    } catch (error) {
+       setError("No product data at the moment")
+      setIsLoading(false)
+    }
   }
+
+  const activeOrder = userOrder.length > 0 ? userOrder.filter(order => order.inProcess) : 0
+
   useEffect(() => {
     getUser()
-  }, [id])
+  }, [])
 
+
+  console.log(userOrder,'details')
   return (
     <section className="p-6">
       <h1 className="text-3xl font-bold">User details</h1>
@@ -50,7 +68,7 @@ const UserId = () => {
           />
           <span className="text-center">
             <p className="font-semibold text-lg mb-1">{user.username}</p>
-            <p>test1234@gmail.com</p>
+            <p>{user.email}</p>
           </span>
 
           <button className="px-6 py-1.5 text-sm rounded border">
@@ -63,8 +81,8 @@ const UserId = () => {
           </h3>
 
           <section className="flex items-center gap-x-20 mt-6 mb-4">
-            <ListItem title="Email" text="test1234@gmail.com" />
-            <ListItem title="Phone Number" text="090040003002" />
+            <ListItem title="Email" text={user.email} />
+            <ListItem title="Phone Number" text={user.mobile} />
           </section>
         </div>
         <div className="px-8 py-4 border-y border-zinc-100">
@@ -73,8 +91,8 @@ const UserId = () => {
           </h3>
 
           <section className="flex items-center gap-x-20 mt-6 mb-4">
-            <ListItem title="Fullname" text="John Doe" />
-            <ListItem title="Address" text="No. 17 Glory lane, Wise Street" />
+            <ListItem title="Fullname" text={user.username} />
+            <ListItem title="Address" text={user.address} />
           </section>
         </div>
         <div className="px-8 py-4">
@@ -83,8 +101,8 @@ const UserId = () => {
           </h3>
 
           <section className="flex items-center gap-x-20 mt-6 mb-4">
-            <ListItem title="Total Orders" text="124" />
-            <ListItem title="Active Orders" text="13" />
+            <ListItem title="Total Orders" text={userOrder.length} />
+            <ListItem title="Active Orders" text={activeOrder} />
           </section>
         </div>
       </section>

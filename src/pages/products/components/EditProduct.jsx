@@ -1,16 +1,28 @@
-import React, { useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { foods } from "../../../utilities";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
+import { useProduct } from "../../../context/productContext";
+import { fetchProduct } from "../../../apIservice/apis";
+
+
+
+const apiLink = process.env.REACT_APP_API_URL
 
 const EditProductPage = () => {
   const location = useLocation();
+  const {id} = useParams()
+  const [product, setproduct] = useState([])
+    const [error, setError] = useState("");
 
-  const urlParts = location.pathname.split("/");
-  const productId = parseInt(urlParts[2]);
-  const product = foods.find((food) => food.id === productId);
-  const [name, setName] = useState(product.name);
-  const [description, setDescription] = useState(product.description);
-  // const [image, setImage] = useState(product.image);
+  
+  useEffect( () => {
+    fetchProduct(id).then(data => setproduct(data))
+
+  },[])  
+  
+  const [name, setName] = useState(product?.name);
+  const [description, setDescription] = useState(product?.description);
+  const [image, setImage] = useState(product?.image);
   const [price, setPrice] = useState(null);
   const fileInputRef = useRef(null);
 
@@ -19,8 +31,32 @@ const EditProductPage = () => {
     // setImage(file);
   };
 
-  const handleSubmit = async () => {
-    // Update the product in your database here.
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+     try {
+      const res = await fetch(`${apiLink}/product/update_products/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name, description, image, price }) 
+      })
+      const data = await res.json()
+      if (res.ok) {
+        // loadProduct()
+        console.log(data)
+        setName('')
+        setDescription('')
+        setImage('')
+        setPrice('')
+      }
+      if (!res.ok) {
+        setError(data.error)
+        console.log(data)
+      }
+    } catch (error) {
+        setError('An error occured on submission')
+    }
   };
 
   return (

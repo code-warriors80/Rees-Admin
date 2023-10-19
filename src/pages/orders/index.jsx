@@ -57,7 +57,7 @@ const ordersArray = [
 
 const ListItem = ({ order }) => {
   const { users } = useUser()
-  const orderUser = users ? users.filter(user => user.id === order.userId) : 'loading user...'
+  const orderUser = users ? users.filter(user => user.id === order.customer) : 'loading user...'
   return (
     <Link
       to={`/orders/${order.id}`}
@@ -67,7 +67,9 @@ const ListItem = ({ order }) => {
         <p className="text-sm font-medium text-gray-900 truncate ">
           {orderUser}
         </p>
-        <p className="text-sm text-gray-500 truncate ">{order.order}</p>
+        <p className="text-sm text-gray-500 truncate ">{
+          order.products
+        }</p>
       </div>
       <div className="inline-flex items-center text-base font-semibold text-gray-900 ">
         {order.date?.toLocaleString("en-NG", {
@@ -82,9 +84,9 @@ const ListItem = ({ order }) => {
 const Orders = () => {
   const { orders, error, isLoading } = useOrder()
 
-  const content = orders?.map((order) => (
+  const content = orders.length > 0 ? orders?.map((order) => (
     <ListItem key={order.id} order={order} />
-  ))
+  )) : 'No other at the moment'
 
 
   return (

@@ -1,9 +1,13 @@
 import React, { useRef, useState } from "react";
+import { useProduct } from "../../../context/productContext";
 
+const apiLink = process.env.REACT_APP_API_URL
 
 const AddProduct = () => {
+  const {getProducts,loadProduct} = useProduct()
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [error, setError] = useState("");
   const [image, setImage] = useState(null);
   const [price, setPrice] = useState(null);
   const fileInputRef = useRef(null);
@@ -13,8 +17,33 @@ const AddProduct = () => {
     setImage(file);
   };
 
-  const handleSubmit = async () => {
-    // Update the product in your database here.
+  const handleSubmit = async (e) => {
+    setError('')
+    e.preventDefault()
+    try {
+      const res = await fetch(`${apiLink}/product/createproducts`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name, description, image, price }) 
+      })
+      const data = await res.json()
+      if (res.ok) {
+        // loadProduct()
+        console.log(data)
+        setName('')
+        setDescription('')
+        setImage('')
+        setPrice('')
+      }
+      if (!res.ok) {
+        setError(data.error)
+        console.log(data)
+      }
+    } catch (error) {
+        setError('An error occured on submission')
+    }
   };
 
   return (
@@ -80,6 +109,7 @@ const AddProduct = () => {
         >
           Submit
         </button>
+        <p className="text-red-500">{error ? error : null}</p>
       </form>
     </div>
   );

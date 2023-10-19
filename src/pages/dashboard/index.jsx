@@ -7,10 +7,9 @@ const Dashboard = () => {
   const { orders, isLoading, error } = useOrder()
   const { users } = useUser()
   const { products } = useProduct()
-  console.log(users, products, 'dataaaa')
-  const content = orders.map((value, i) => {
+  const content = orders.length > 0 ? orders?.map((value, i) => {
     return (
-      <tr className="border-b text-gray-500">
+      <tr className="border-b text-gray-500" key={i}>
         <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">{value.name}</th>
         <td className="px-6 py-4 text-center">{value.orderId}</td>
         <td className="px-6 py-4 text-center">{value.quantity}</td>
@@ -18,7 +17,7 @@ const Dashboard = () => {
         <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap text-orange-500">{value.status}</th>
       </tr>
     )
-  })
+  }) : <h1>There are no orders yet</h1>
 
   return (
     <section className="p-6 w-[70%]">

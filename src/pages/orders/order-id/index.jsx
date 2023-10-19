@@ -100,7 +100,7 @@ const OrderId = () => {
   const getOrder = async () => {
 
     try {
-      const res = await fetch(`${apiLink}/${id}`, {
+      const res = await fetch(`${apiLink}/api/${id}`, {
         headers: {
           "Content-type": "application/json",
         }
