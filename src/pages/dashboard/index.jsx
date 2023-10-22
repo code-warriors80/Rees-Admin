@@ -7,20 +7,27 @@ const Dashboard = () => {
   const { orders, isLoading, error } = useOrder()
   const { users } = useUser()
   const { products } = useProduct()
+  
+  console.log(orders,'changes')
   const content = orders.length > 0 ? orders?.map((value, i) => {
+      const orderUser = users ? users.filter(user => user._id === value.customer) : 'loading user...'
     return (
       <tr className="border-b text-gray-500" key={i}>
-        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">{value.name}</th>
-        <td className="px-6 py-4 text-center">{value.orderId}</td>
-        <td className="px-6 py-4 text-center">{value.quantity}</td>
-        <td className="px-6 py-4 text-center">{value.price}</td>
-        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap text-orange-500">{value.status}</th>
+        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">{orderUser.map((user, index) => (
+            <li key={user.username} className="text-sm list-none font-medium text-gray-900 truncate">
+              <span className="mr-2">{index + 1}.</span> {user.username}
+            </li>
+          ))}</th>
+        <td className="px-6 py-4 text-center">{value._id}</td>
+        <td className="px-6 py-4 text-center">{value.products.reduce((total, item) => total + item.quantity, 0)}</td>
+        <td className="px-6 py-4 text-center">{value.totalAmount}</td>
+        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap text-orange-500">{value.paymentStatus}</th>
       </tr>
     )
   }) : <h1>There are no orders yet</h1>
 
   return (
-    <section className="p-6 w-[70%]">
+    <section className="p-6 min-w-[70%]">
       <h1 className="mb-5">Dashboard page</h1>
 
       <section className="flex items-center gap-5">
