@@ -108,7 +108,7 @@ const OrderId = () => {
 
   console.log(order,'order')
   const getOrder = async () => {
-
+      setIsLoading(true)
     try {
       const res = await fetch(`${apiLink}/order/order/${id}`, {
         headers: {
@@ -183,7 +183,7 @@ const OrderId = () => {
                     order={order}
                     qty={order.products}
                   />
-                )) : JSON.stringify(order)}
+                )) : isloading ? 'Loading....' : error ? error : 'No other at the moment'}
               </tbody>
             </table>
           </div>
