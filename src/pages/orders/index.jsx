@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useOrder } from "../../context/ordersContext";
 import { useUser } from "../../context/userContext";
+import { useProduct } from "../../context/productContext";
 
 const ordersArray = [
   {
@@ -57,19 +58,32 @@ const ordersArray = [
 
 const ListItem = ({ order }) => {
   const { users } = useUser()
-  const orderUser = users ? users.filter(user => user.id === order.customer) : 'loading user...'
+  const { products } = useProduct()
+  const orderUser = users ? users.filter(user => user._id === order.customer) : 'loading user...'
+  const orderProduct = order.products.map(v => v._id)
+  const product = products ? products.filter(product => orderProduct) : 'loading product...'
   return (
     <Link
-      to={`/orders/${order.id}`}
+      to={`/orders/${order._id}`}
       className="flex items-center p-3 hover:bg-zinc-50 space-x-4"
     >
       <div className="flex-1 min-w-0">
         <p className="text-sm font-medium text-gray-900 truncate ">
-          {orderUser}
+          {orderUser.map((user, index) => (
+            <li key={user.username} className="text-sm list-none font-medium text-gray-900 truncate">
+              <span className="mr-2">{index + 1}.</span> {user.username}
+            </li>
+          ))}
         </p>
-        <p className="text-sm text-gray-500 truncate ">{
-          order.products
-        }</p>
+        <p className="text-sm text-gray-500 truncate">
+          {product.map(v => (
+            <li key={v.name}>
+              <span className="mr-2">{v.name} </span>
+              <span>#{v.price}</span>
+            </li>
+          ))}
+        </p>
+
       </div>
       <div className="inline-flex items-center text-base font-semibold text-gray-900 ">
         {order.date?.toLocaleString("en-NG", {

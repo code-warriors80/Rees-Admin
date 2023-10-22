@@ -1,15 +1,18 @@
 import React, { useRef, useState } from "react";
 import { useProduct } from "../../../context/productContext";
+import { useCategory } from "../../../context/categoryContext";
 
 const apiLink = process.env.REACT_APP_API_URL
 
 const AddProduct = () => {
-  const {getProducts,loadProduct} = useProduct()
+  const { getProducts, loadProduct } = useProduct()
+  const { categories } = useCategory()
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [error, setError] = useState("");
   const [image, setImage] = useState(null);
   const [price, setPrice] = useState(null);
+  const [categoryId, setCategoryId] = useState('');
   const fileInputRef = useRef(null);
 
   const handleChangeImage = (event) => {
@@ -17,6 +20,7 @@ const AddProduct = () => {
     setImage(file);
   };
 
+  console.log(categories)
   const handleSubmit = async (e) => {
     setError('')
     e.preventDefault()
@@ -26,7 +30,7 @@ const AddProduct = () => {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ name, description, image, price }) 
+        body: JSON.stringify({ name, description, image, price,categoryId  })
       })
       const data = await res.json()
       if (res.ok) {
@@ -42,7 +46,7 @@ const AddProduct = () => {
         console.log(data)
       }
     } catch (error) {
-        setError('An error occured on submission')
+      setError('An error occured on submission')
     }
   };
 
@@ -93,11 +97,13 @@ const AddProduct = () => {
         <div className="flex flex-col gap-2">
           <p className="font-medium text-lg">Product Image:</p>
           <div>
-            <select className="border outline-none">
+            <select className="border outline-none" value={categoryId} onChange={(e) => setCategoryId(e.target.value)}>
               <option value="">Select Category</option>
-              <option value="">Local | Continental</option>
-              <option value="">English | Foreign</option>
-              <option value="">Soup | Stew</option>
+              {
+                categories.map(value => (
+                  <option value={value._id} key={value._id} >{value.name}</option>
+                ))
+              }
             </select>
           </div>
         </div>
@@ -118,6 +124,7 @@ const AddProduct = () => {
         <button
           type="submit"
           className="bg-purple-500 w-20 rounded-[10px] p-2 text-white"
+          onClick={handleSubmit}
         >
           Submit
         </button>

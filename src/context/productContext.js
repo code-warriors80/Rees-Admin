@@ -19,7 +19,6 @@ export const ProductProvider = ({ children }) => {
     setIsLoading(true);
     try {
       const res = await fetch(`${apiLink}/product/products`, {
-        method: "DELETE",
         headers: {
           "Content-type": "application/json",
         },

@@ -3,6 +3,7 @@ import { foods } from "../../../utilities";
 import { useLocation, useParams } from "react-router-dom";
 import { useProduct } from "../../../context/productContext";
 import { fetchProduct } from "../../../apIservice/apis";
+import { useCategory } from "../../../context/categoryContext";
 
 
 
@@ -10,20 +11,31 @@ const apiLink = process.env.REACT_APP_API_URL
 
 const EditProductPage = () => {
   const location = useLocation();
-  const {id} = useParams()
+  const {productid} = useParams()
   const [product, setproduct] = useState([])
     const [error, setError] = useState("");
 
-  
   useEffect( () => {
-    fetchProduct(id).then(data => setproduct(data))
+    fetchProduct(productid).then(data => {
+      setproduct(data)
+      
+    })
 
   },[])  
-  
-  const [name, setName] = useState(product?.name);
-  const [description, setDescription] = useState(product?.description);
+
+  useEffect(() => {
+    setName(product.name)
+      setDescription(product.description)
+      setPrice(product.price)
+      setCategoryId(product?.category)
+  },[product])
+    const { categories } = useCategory()
+  const [name, setName] = useState();
+  const [description, setDescription] = useState();
   const [image, setImage] = useState(product?.image);
   const [price, setPrice] = useState(null);
+    const [categoryId, setCategoryId] = useState();
+
   const fileInputRef = useRef(null);
 
   const handleChangeImage = (event) => {
@@ -34,12 +46,12 @@ const EditProductPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
      try {
-      const res = await fetch(`${apiLink}/product/update_products/${id}`, {
-        method: 'PATCH',
+      const res = await fetch(`${apiLink}/product/update_products/${productid}`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ name, description, image, price }) 
+        body: JSON.stringify({ name, description, image, price,categoryId }) 
       })
       const data = await res.json()
       if (res.ok) {
@@ -100,6 +112,19 @@ const EditProductPage = () => {
               // value={image}
               onChange={handleChangeImage}
             />
+          </div>
+        </div>
+    <div className="flex flex-col gap-2">
+          <p className="font-medium text-lg">Product Image:</p>
+          <div>
+            <select className="border outline-none" value={categoryId} onChange={(e) => setCategoryId(e.target.value)}>
+              <option value="">Select Category</option>
+              {
+                categories.map(value => (
+                  <option value={value._id} key={value._id} >{value.name}</option>
+                ))
+              }
+            </select>
           </div>
         </div>
 

@@ -15,7 +15,7 @@ const Card = ({ product }) => {
     e.preventDefault()
     alert('Are you sure?')
      try {
-       const res = await fetch(`${apiLink}/product/delete_products/${product.id}`, {
+       const res = await fetch(`${apiLink}/product/delete_products/${product._id}`, {
         method:'DELETE',
         headers: {
           "Content-type": "application/json",
@@ -36,14 +36,14 @@ const Card = ({ product }) => {
   return (
     <div className="relative maincard card card-compact w-80 bg-base-100 shadow-xl">
       <figure>
-        <img src={product.image} alt={product.alt} className="card-img"/>
+        <img src={product.image_url} alt={product.name} className="card-img"/>
       </figure>
       <div className="absolute main top-1 right-0  p-[10px]">
         <div className="relative dots-menu">
           <ThreeDotsVertical className="text-2xl dots" onClick={() => setDropdown(!dropdown)}/>
           <div className={`absolute secmain top-8 right-0  ${dropdown ? 'block' : "hidden"}`}>
             <ul className="items-end text-left rounded-xl w-40 bg-white flex flex-col">
-               <li className="p-1 w-full text-right rounded-t-xl l-item"><Link to={`/products/${product.id}/edit`}>Edit</Link></li> 
+               <li className="p-1 w-full text-right rounded-t-xl l-item"><Link to={`/products/${product._id}/edit`}>Edit</Link></li> 
                <li className="p-1 w-full text-right l-item"> <a href="blank">View Details</a></li> 
                <li className="p-1 w-full text-right rounded-b-xl l-item"> <a onClick={handleDelete}>Delete</a></li> 
             </ul>

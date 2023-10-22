@@ -56,18 +56,25 @@ const ordersArray = [
 ];
 
 const TableItem = ({ order, qty }) => {
+  const { users } = useUser()
+
+    const orderUser = users ? users.filter(user => user._id === order.customer) : 'loading user...'
   return (
     <tr className="bg-white border-b ">
       <th
         scope="row"
         className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
       >
-        {order.order}
+        {orderUser.map((user, index) => (
+            <li key={user.username} className="text-sm list-none font-medium truncate">
+              <span className="mr-2">{index + 1}.</span> {user.username}
+            </li>
+          ))}
       </th>
-      <td className="px-6 py-4 text-center">#{order.id}</td>
-      <td className="px-6 py-4 text-center">{qty.toString().length}</td>
+      <td className="px-6 py-4 text-center">#{order._id}</td>
+      <td className="px-6 py-4 text-center">{qty.reduce((total, item) => total + item.quantity, 0)}</td>
       <td className="px-6 py-4">
-        {order.id.toLocaleString("en-NG", {
+        {order.totalAmount.toLocaleString("en-NG", {
           style: "currency",
           currency: "NGN",
         })}
@@ -94,20 +101,23 @@ const OrderId = () => {
   let { id } = useParams();
   const [order, setOrder] = useState([])
   const { users } = useUser()
-  const orderUser = users ? users.filter(user => user.id === order.userId) : 'loading user...'
+  const orderUser = users ? users.filter(user => user._id === order.customer) : 'loading user...'
   const [error, setError] = useState('')
   const [isloading, setIsLoading] = useState(false)
+
+
+  console.log(order,'order')
   const getOrder = async () => {
 
     try {
-      const res = await fetch(`${apiLink}/api/${id}`, {
+      const res = await fetch(`${apiLink}/order/order/${id}`, {
         headers: {
           "Content-type": "application/json",
         }
       })
-      const data = res.json()
+      const data = await res.json()
       if (res.ok) {
-        setOrder(data.data)
+        setOrder([data])
         setIsLoading(false)
 
       }
@@ -124,7 +134,7 @@ const OrderId = () => {
   }
   useEffect(() => {
     getOrder()
-  }, [id])
+  }, [])
   return (
     <section className="p-6">
       <h1 className="text-3xl font-bold">Orders / Order-details</h1>
@@ -145,7 +155,7 @@ const OrderId = () => {
         </div>
         <div className="mt-6">
           <h3 className="text-zinc-400 font-bold">
-            Order Details ({order.slice(5).length})
+            Order Details ({order.length})
           </h3>
 
           <div className="mt-8 relative overflow-x-auto">
@@ -167,22 +177,22 @@ const OrderId = () => {
                 </tr>
               </thead>
               <tbody>
-                {ordersArray.slice(5).map((order, index) => (
+                {order.length > 0 ? order.map((order, index) => (
                   <TableItem
-                    key={order.id}
+                    key={order._id}
                     order={order}
-                    qty={order.id * index}
+                    qty={order.products}
                   />
-                ))}
+                )) : JSON.stringify(order)}
               </tbody>
             </table>
           </div>
 
           <aside className="flex  justify-end mt-8">
             <div>
-              <ListItem text="Subtotal" value={1200} />
-              <ListItem text="Tax (3%)" value={36} />
-              <ListItem text="Total" value={1200 + 36} />
+              {/* <ListItem text="Subtotal" value={1200} />
+              <ListItem text="Tax (3%)" value={36} /> */}
+              <ListItem text="Total" value={order.map(value => value.totalAmount)} />
             </div>
           </aside>
         </div>

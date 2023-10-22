@@ -1,5 +1,3 @@
-import { useCallback } from "react";
-
 const apiLink = process.env.REACT_APP_API_URL;
 
 export async function getCustomerOrder(customerId) {
@@ -28,7 +26,8 @@ export async function getCustomerOrder(customerId) {
 
 export const fetchProduct = async (id) => {
   try {
-    const res = await fetch(`${apiLink}/api/product/${id}`, {
+    const res = await fetch(`${apiLink}/product/product/${id}`, {
+      method:'get',
       headers: {
         "Content-Type": "application/json",
       },

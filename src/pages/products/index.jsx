@@ -8,10 +8,14 @@ import Topbar from "./components/Topbar";
 import { useState } from "react";
 import { foods } from "../../utilities";
 import Card from "./components/Card";
+import { useProduct } from "../../context/productContext";
 
 const Products = () => {
   const [active, setActive] = useState(false);
   const [category, setCategory] = useState(false);
+  const { products } = useProduct()
+
+  console.log(products)
   return (
     <section className="p-6">
       <Topbar />
@@ -47,7 +51,7 @@ const Products = () => {
           </div>
 
           <div className="flex gap-4 flex-wrap mt-6">
-              {foods.map((food) => (<Card key={food.id} product={food}/>))}
+              {products.map((food) => (<Card key={food._id} product={food}/>))}
           </div>
         </div>
         <div className="right">
