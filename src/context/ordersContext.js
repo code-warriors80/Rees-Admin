@@ -11,7 +11,7 @@ export const OrderProvider = ({ children }) => {
   const loadOrder = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch(`${apiLink}/order/orders`, {
+      const res = await fetch(`${apiLink}/order/ordersproduct`, {
         headers: {
           "Content-type": "application/json",
         },

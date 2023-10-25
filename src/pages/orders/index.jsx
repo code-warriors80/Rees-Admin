@@ -57,36 +57,38 @@ const ordersArray = [
 ];
 
 const ListItem = ({ order }) => {
-  const { users } = useUser()
-  const { products } = useProduct()
-  const orderUser = users ? users.filter(user => user._id === order.customer) : 'loading user...'
-  const orderProduct = order.products.map(v => v._id)
-  const product = products ? products.filter(product => orderProduct) : 'loading product...'
+  const { users } = useUser();
+
+  const orderUser = users
+    ? users.filter((user) => user._id === order.customer)
+    : "loading user...";
   return (
     <Link
-      to={`/orders/${order._id}`}
+      to={`/orders/${order.order._id}`}
       className="flex items-center p-3 hover:bg-zinc-50 space-x-4"
     >
       <div className="flex-1 min-w-0">
         <p className="text-sm font-medium text-gray-900 truncate ">
           {orderUser.map((user, index) => (
-            <li key={user.username} className="text-sm list-none font-medium text-gray-900 truncate">
+            <li
+              key={user.username}
+              className="text-sm list-none font-medium text-gray-900 truncate"
+            >
               <span className="mr-2">{index + 1}.</span> {user.username}
             </li>
           ))}
         </p>
         <p className="text-sm text-gray-500 truncate">
-          {product.map(v => (
+          {order.products.map((v) => (
             <li key={v.name}>
               <span className="mr-2">{v.name} </span>
               <span>#{v.price}</span>
             </li>
           ))}
         </p>
-
       </div>
       <div className="inline-flex items-center text-base font-semibold text-gray-900 ">
-        {order.date?.toLocaleString("en-NG", {
+        {order.order.orderDate?.toLocaleString("en-NG", {
           style: "currency",
           currency: "NGN",
         })}
@@ -96,12 +98,11 @@ const ListItem = ({ order }) => {
 };
 
 const Orders = () => {
-  const { orders, error, isLoading } = useOrder()
-
-  const content = orders.length > 0 ? orders?.map((order) => (
-    <ListItem key={order.id} order={order} />
-  )) : 'No other at the moment'
-
+  const { orders, error, isLoading } = useOrder();
+  const content =
+    orders.length > 0
+      ? orders?.map((order) => <ListItem key={order.id} order={order} />)
+      : "No other at the moment";
 
   return (
     <section className="p-6">
@@ -114,10 +115,7 @@ const Orders = () => {
       </select>
 
       <section className="grid my-3 w-2/3 divide-y divide-gray-200">
-        {
-          isLoading ? 'loading...' :
-            error ? "An error occured" : content
-        }
+        {isLoading ? "loading..." : error ? "An error occured" : content}
       </section>
     </section>
   );
