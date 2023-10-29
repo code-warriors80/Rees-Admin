@@ -94,7 +94,7 @@ if (!orderDetails || orderDetails.length === 0) {
 
           <div className="mt-8 relative overflow-x-auto">
             <table className="w-full text-sm text-left text-gray-500">
-              <thead className="text-xs text-white uppercase bg-purple-600">
+              <thead className="text-xs text-white uppercase bg-[#F39300]">
                 <tr>
                   <th scope="col" className="px-6 py-3">
                     Product name

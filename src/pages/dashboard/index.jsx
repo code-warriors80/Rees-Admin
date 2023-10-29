@@ -39,7 +39,7 @@ const Dashboard = () => {
             <td className="px-6 py-4 text-center">{value.order.totalAmount}</td>
             <th
               scope="row"
-              className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap text-orange-500"
+              className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
             >
               {value.order.paymentStatus}
             </th>
