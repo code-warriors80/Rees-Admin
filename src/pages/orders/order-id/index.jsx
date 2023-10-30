@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-const TableItem = ({ product, qty }) => {
+const TableItem = ({ index, product, qty }) => {
   return (
     <tr className="bg-white border-b">
-      <th
-        scope="row"
-        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-      >
+      <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+        {index +1}
+      </td>
+      <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
         {product.name}
-      </th>
+      </td>
       <td className="px-6 py-4 text-center">#{product._id}</td>
       <td className="px-6 py-4 text-center">{qty}</td>
       <td className="px-6 py-4">
@@ -63,7 +63,15 @@ if (!orderDetails || orderDetails.length === 0) {
 
   
   const order = orderDetails[0].order; // Access the order property
-  console.log(order);
+  let delivered = order.isDelivered
+  if(delivered === true)
+  {
+    delivered = 'Delivered' 
+  }else
+  {
+    delivered = 'Pending' 
+  }
+
   const customer = orderDetails[0].customer; // Access the customer property
   console.log(customer);
   const products = orderDetails[0].products; // Access the products property
@@ -74,17 +82,46 @@ if (!orderDetails || orderDetails.length === 0) {
       <h1 className="text-3xl font-bold">Orders / Order-details</h1>
 
       <section className="w-4/5 my-8">
-        <div className="flex items-center space-x-4">
+        <div className="flex items-start space-x-4">
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-gray-900 truncate ">
-              {customer.username}
-            </p>
-            <p className="text-sm text-gray-500 truncate ">
-              {customer.email}
-            </p>
+            <div>
+              <h1 className="font-bold mb-2">Customer Details</h1>
+                <div className="flex items-center gap-2 mb-2">
+                  <h1 className="font-semibold text-[14px]">Username: </h1>
+                  <p className="text-sm font-medium text-gray-500 truncate ">
+                    {customer.username}
+                  </p>
+                </div>
+                <div className="flex items-center gap-2 mb-2">
+                  <h1 className="font-semibold text-[14px]">Contact: </h1>
+                  <p className="text-sm font-medium text-gray-500 truncate ">
+                    {customer.mobile}
+                  </p>
+                </div>
+                <div className="flex items-center gap-2 mb-2">
+                  <h1 className="font-semibold text-[14px]">Email</h1>
+                  <p className="text-sm font-medium text-gray-500 truncate ">
+                    {customer.email}
+                  </p>
+                </div>
+            </div>
+
+            <div className="mt-4">
+              <h1 className="font-bold">Delivery Address</h1>
+              <p className="text-sm font-medium text-gray-500 truncate ">
+                {order.address}
+              </p>
+            </div>
           </div>
-          <div className="inline-flex items-center text-base font-semibold text-gray-900 ">
-            Order #{order._id}
+          <div className="text-base font-semibold text-gray-900 ">
+            <div className="">
+              <p>Order #:</p>
+              <p className="text-sm font-medium text-gray-500 truncate ">{order._id}</p>
+            </div>
+            <div className="mt-4">
+              <p>Delivery Status:</p>
+              <p className="text-sm font-medium text-gray-500 truncate ">{delivered}</p>
+            </div>
           </div>
         </div>
         <div className="mt-6">
@@ -96,6 +133,9 @@ if (!orderDetails || orderDetails.length === 0) {
             <table className="w-full text-sm text-left text-gray-500">
               <thead className="text-xs text-white uppercase bg-[#F39300]">
                 <tr>
+                  <th scope="col" className="px-6 py-3">
+                    S/N
+                  </th>
                   <th scope="col" className="px-6 py-3">
                     Product name
                   </th>
@@ -111,8 +151,8 @@ if (!orderDetails || orderDetails.length === 0) {
                 </tr>
               </thead>
               <tbody>
-                {products.map((product) => (
-                  <TableItem key={product.product._id} product={product.product} qty={product.quantity} />
+                {products.map((product, index) => (
+                  <TableItem key={index} index={index} product={product.product} qty={product.quantity} />
                 ))}
               </tbody>
             </table>

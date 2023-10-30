@@ -19,7 +19,7 @@ const ListItem = ({ order }) => {
 
   return (
     <Link to={`/orders/${order.order._id}`} className="flex items-center p-3 hover-bg-zinc-50 space-x-4">
-      <div className="flex-1 min-w-0">
+      <div className="flex-1 flex-row items-start min-w-0">
         <p className="text-sm font-medium text-gray-900 truncate">{order.customer.username}</p>
         <p className="text-sm font-medium text-gray-900 truncate">{order.order.products.length}</p>
         <p className="text-sm text-gray-500 truncate"></p>
