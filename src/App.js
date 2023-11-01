@@ -14,7 +14,7 @@ import AddProduct from "./pages/products/components/AddProduct";
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename='/Rees-Admin'>
       <Routes>
         <Route path="/" element={<Login />} />
         <Route element={<AccountLayout />}>
