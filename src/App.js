@@ -28,7 +28,6 @@ function App() {
           <Route path="/products/:productid/edit" element={<EditProductPage />} />
           <Route path="products/add" element={<AddProduct />} />
         </Route>
-    
       </Routes>
     </BrowserRouter>
   );
