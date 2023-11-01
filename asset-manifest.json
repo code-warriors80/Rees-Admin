@@ -1,0 +1,19 @@
+{
+  "files": {
+    "main.css": "/Rees-Admin/static/css/main.fa63cb10.css",
+    "main.js": "/Rees-Admin/static/js/main.919d5ed4.js",
+    "static/media/pundedyam.jpg": "/Rees-Admin/static/media/pundedyam.b16d46b47bbe64ceae7b.jpg",
+    "static/media/egusi.jpg": "/Rees-Admin/static/media/egusi.0796eaa525950c62a096.jpg",
+    "static/media/indomie.jpg": "/Rees-Admin/static/media/indomie.ae0b5ddb5c839463b56d.jpg",
+    "static/media/jollofrice.jpg": "/Rees-Admin/static/media/jollofrice.d38ddf86332a232c9820.jpg",
+    "static/media/friedrice.jpg": "/Rees-Admin/static/media/friedrice.6abc1ac45090a6a499c0.jpg",
+    "static/media/boiledyam.jpg": "/Rees-Admin/static/media/boiledyam.d7de5174b9df8f40c833.jpg",
+    "index.html": "/Rees-Admin/index.html",
+    "main.fa63cb10.css.map": "/Rees-Admin/static/css/main.fa63cb10.css.map",
+    "main.919d5ed4.js.map": "/Rees-Admin/static/js/main.919d5ed4.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.fa63cb10.css",
+    "static/js/main.919d5ed4.js"
+  ]
+}
